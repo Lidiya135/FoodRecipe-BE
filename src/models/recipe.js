@@ -1,82 +1,21 @@
-const Pool = require('../config/db');
+const Pool = require ('../config/db');
 
-const insertRecipe = ({
-  name_recipe, photo, video, description, id_user,
-}) => new Promise((resolve, reject) => {
-  Pool.query(
-    `INSERT INTO recipes(name_recipe,photo,video,description,id_user) VALUES ('${name_recipe}','${photo}','${video}','${description}','${id_user}')`,
-    (err, result) => {
-      if (!err) {
-        resolve(result);
-      } else {
-        reject(err);
-      }
-    },
-  );
-});
-
-const updateRecipe = (id, {
-    name_recipe, photo, video, description,
-}) => new Promise((resolve, reject) => {
-  Pool.query(
-    `UPDATE recipes SET recipes_name='${name_recipe}',photo='${photo}',video='${video}',description='${description}' WHERE id_recipe='${id}'`,
-    (err, result) => {
-      if (!err) {
-        resolve(result);
-      } else {
-        reject(err);
-      }
-    },
-  );
-});
-
-const deleteRecipe = (id) => new Promise((resolve, reject) => {
-  Pool.query(
-    `DELETE FROM recipe WHERE id_recipe='${id}'`,
-    (err, result) => {
-      if (!err) {
-        resolve(result);
-      } else {
-        reject(err);
-      }
-    },
-  );
-});
-
-const selectRecipeId = (id) => new Promise((resolve, reject) => {
-  Pool.query(
-    `SELECT * FROM recipe WHERE id_recipe='${id}'`,
-    (err, result) => {
-      if (!err) {
-        resolve(result);
-      } else {
-        reject(err);
-      }
-    },
-  );
-});
-
-// const selectRecipe = () => new Promise((resolve, reject) => {
-//   Pool.query(
-//     `SELECT * FROM recipe`,
-//     (err, result) => {
-//       if (!err) {
-//         resolve(result);
-//       } else {
-//         reject(err);
-//       }
-//     },
-//   )
-// });
-
-const selectRecipe =()=>{
-  return Pool.query(`SELECT * FROM recipe`)
+const selectRecipe = ({limit,offset,sort,sortby,search, page}) => {
+    return Pool.query(`SELECT * FROM recipe ORDER BY recipe.${sortby} ${sort} LIMIT ${limit} OFFSET ${offset}`);
+}
+const selectRecipeById = (id) => {
+    return Pool.query(`SELECT recipe.id,recipe.title,recipe.vidio,recipe.photo,recipe.ingredients,recipe.description FROM recipe WHERE recipe.id='${id}' `);  
+}
+const deleteRecipe = (id) => {
+    return Pool.query(`DELETE FROM recipe WHERE recipe.id='${id}'`);  
+}
+const insertRecipe = (data) => {
+    const {title,vidio,photo,ingredients,description,user_recipe_id} = data;
+    return Pool.query(`INSERT INTO recipe(title,vidio,photo,ingredients,description,user_recipe_id) VALUES('${title}','${vidio}','${photo}','${ingredients}','${description}','${user_recipe_id}')`);
+    console.log(data,"odal")  
+}
+const selectUser = ({limit,offset,sort,sortby,search, page,user_rec}) => {
+    return Pool.query(`SELECT recipe.id,recipe.title,recipe.ingredients,recipe.vidio,recipe.photo,recipe.description,user_rec.id as user_recipe_id FROM recipe INNER JOIN user_rec ON recipe.user_recipe_id = user_rec.id WHERE user_rec.id='${user_rec}'`);
 }
 
-module.exports = {
-    insertRecipe,
-    updateRecipe,
-    deleteRecipe,
-    selectRecipe,
-    selectRecipeId
-  };
+module.exports = {selectRecipeById, selectRecipe, insertRecipe, deleteRecipe,selectUser}

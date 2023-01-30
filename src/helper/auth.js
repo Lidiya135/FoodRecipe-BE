@@ -12,10 +12,15 @@ const generateToken = (payload) =>{
 
 const genRefreshToken = (payload) =>{
     const verifyOpts = {
-        expiresIn: '1y'
+        expiresIn: '24y'
     }
     const token = jwt.sign(payload, key, verifyOpts)
     return token
 }
 
-module.exports = {generateToken, genRefreshToken}
+const decodeToken = (token) => {
+  var decoded = jwt.verify(token, key);
+  return decoded;
+};
+
+module.exports = {generateToken, genRefreshToken,  decodeToken }

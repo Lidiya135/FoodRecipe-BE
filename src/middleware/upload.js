@@ -11,16 +11,16 @@ const storage = multer.diskStorage({
 })
 
 const upload = multer({
-    limits: { fileSize: 10 * Math.pow(1024, 2 /* MBs*/) },
+    // limits: { fileSize: 10 * Math.pow(1024, 2 /* MBs*/) },
     storage: storage,
-    fileFilter: (req, file, cb) => {
-      if (file.mimetype === 'image/png' || file.mimetype === 'image/jpg' || file.mimetype === 'image/jpeg') {
-        cb(null, true);
-      } else {
-        cb(null, false);
-        return cb(new Error('Only png and jpg allowed'));
-      }
-    },
+    // fileFilter: (req, file, cb) => {
+    //   if (file.mimetype === 'image/png' || file.mimetype === 'image/jpg' || file.mimetype === 'image/jpeg') {
+    //     cb(null, true);
+    //   } else {
+    //     cb(null, false);
+    //     return cb(new Error('Only png and jpg allowed'));
+    //   }
+    // },
   });
 
 module.exports = upload

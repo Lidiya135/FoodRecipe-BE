@@ -3,26 +3,41 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 const helmet = require('helmet');
 const morgan = require('morgan');
-
-
-const mainRouter = require('./src/routes/index');
-
+require('dotenv').config();
+const mainRouter = require('./src/router/index');
+const { response } = require('./src/middleware/common');
 const app = express();
 
-const recipe =  require('./src/routes/recipe');
-const users =  require('./src/routes/users');
-
+app.use(express.json()); app.use(express.urlencoded({
+  extended: true,
+  })
+ );
 app.use(bodyParser.json());
-app.use(cors());
-app.use(helmet());
-app.use(morgan('dev'));
+// app.use(cors());
+app.use(morgan("dev"));
+app.use(helmet({
+  crossOriginResourcePolicy: false,
+}));
+// app.use(cors({credentials: true}))
+const corsOptions = {
+  origin: "http://localhost:3000",
+  credentials: true, //access-control-allow-credentials:true
+  optionSuccessStatus: 200,
+};
 
+app.use(cors(corsOptions));
+const port = process.env.PORT;
 
-const port = 4000;
-
-app.use('/recipe', recipe);
-app.use('/users', users);
 app.use('/', mainRouter);
+app.use('/img', express.static('./upload'));
+
+app.all('*', (req, res, next) => {
+  response(res, 404, false, null, '404 Not Found');
+});
+
+app.get('/', (req, res, next) => {
+  res.status(200).json({ status: 'success', statusCode: 200 });
+});
 
 app.get('/', (req, res) => {
   res.send('Hello World!');
