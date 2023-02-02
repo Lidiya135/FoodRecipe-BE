@@ -34,4 +34,3 @@ const CommentController = {
 
 
 exports.CommentController = CommentController
-

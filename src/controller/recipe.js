@@ -6,16 +6,20 @@ const { v4: uuidv4, stringify } = require('uuid'); //membuat id unik
 
 const recipeController = {
     getRecipe : (req,res,next) => {
-        const sortby = req.query.sortby || "id" ;
-        const sort = req.query.sort || "DESC";
-        const search = req.query.search || '';
-        const page = Number(req.query.page) || 1 ;
-        const limit = Number(req.query.limit) || 10 ;
-        const offset = (page - 1) * limit ;
-        
-        ModelRecipe.selectRecipe({limit,offset,sort,sortby,search,page })
+        ModelRecipe.selectRecipe()
         .then(result => response(res,200,true,result.rows,'get data succes'))
         .catch(err => response(res,401,false,err.message,'get data fail'))
+    },
+    getRecipee : (req,res,next) => {
+        const sortby = req.query.sortby || "id" ;
+        const sort = req.query.sort || "asc";
+        const search = req.query.search || '';
+        const page = req.query.page || 1 ;
+        const limit = req.query.limit || 6 ;
+        
+        ModelRecipe.selectRecipee(sortby,sort,search,page,limit )
+        .then((result) => response(res,200,true,result.rows,'get data succes'))
+        .catch((err) => response(res,401,false,err.message,'get data fail'))
     },
     getRecipeUser : (req,res,next) => {
         const sortby = req.query.sortby || "id" ;
@@ -55,7 +59,7 @@ const recipeController = {
             title : req.body.title,
             ingredients : req.body.ingredients,
             description : req.body.description,
-            user_recipe_id : req.body.user_recipe_id,
+            user_recipe_id : req.payload.id,
             vidio : req.body.vidio
         }
         console.log(data)
@@ -64,11 +68,28 @@ const recipeController = {
         .catch(err => response(res,401,false,err.message,'insert data fail'))
     },
 
-    insertt: async (req, res) => {
-        ModelRecipe.insertRecipe(req.body)
-        .then((result)=> response(res, 200, true, result.rows, "INPUT RECIPE SUCCESS"))
-        .catch((err)=> response(res, 404, false, err, "INPUT RECIPE FAILED"))
-      },
+    update :  (req,res,next) => {
+        console.log(req.body,"req body put recipe")
+        const Port = process.env.PORT;
+        const Host = process.env.HOST;
+        const photo = req.file.filename;
+        console.log(photo,"consol poto");
+        const uri = `http://${Host}:${Port}/img/${photo}`;
+        console.log(uri)
+        // const id =  uuidv4();
+        const id = req.params.id;
+        const data = {
+            title : req.body.title,
+            ingredients : req.body.ingredients,
+            vidio : req.body.vidio,
+            photo:  uri,
+        }
+        console.log(data)
+        ModelRecipe.updateRecipe(id, data)
+        .then((result) => response(res,200,true,result.rows,'update recipe data succes'))
+        .catch((err) => response(res,401,false,err.message,'update recipe data fail'))
+    },
+
     
 }
 

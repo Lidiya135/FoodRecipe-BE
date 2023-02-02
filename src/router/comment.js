@@ -6,9 +6,9 @@ const {protect} = require ('../middleware/auth')
 const multer = require('multer');
 const uploade = multer();
 
-router.get('/',protect,CommentController.getComment)
-router.get('/:recipe_id',CommentController.getCommentById)
-router.post('/',protect,uploade.array(),CommentController.insert)
+router.get('/',CommentController.getComment);
+router.get('/:recipe_id',CommentController.getCommentById);
+router.post('/',protect,uploade.array(),CommentController.insert);
 
 
 module.exports = router;
