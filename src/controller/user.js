@@ -3,7 +3,7 @@ const {create, findEmail, updateUser, getDataId, getData} = require('../models/u
 const bcrypt = require('bcryptjs');
 const { v4: uuidv4 } =  require('uuid');
 const {generateToken, genRefreshToken} = require('../helper/auth');
-const  ModelUsers = require('../models/user')
+const  ModelUsers = require('../models/user');
 
 const UsersController = {
     insert: async  (req, res, next) => {
