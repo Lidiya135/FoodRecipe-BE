@@ -8,7 +8,7 @@ router.post('/register', UsersController.insert);
 router.post('/login',UsersController.login);
 router.get('/data',protect,UsersController.getUserId);
 router.get('/',protect,UsersController.getUser);
-router.put('/profile',protect,upload.single("photo"),protect,UsersController.update)
+router.put('/profile',protect,upload.single("photo"),UsersController.update)
 
 
 module.exports = router;
