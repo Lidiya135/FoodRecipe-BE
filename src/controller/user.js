@@ -4,6 +4,7 @@ const bcrypt = require('bcryptjs');
 const { v4: uuidv4 } =  require('uuid');
 const {generateToken, genRefreshToken} = require('../helper/auth');
 const  ModelUsers = require('../models/user');
+const cloudinary = require('../config/cloudinary')
 
 const UsersController = {
     insert: async  (req, res, next) => {
@@ -87,22 +88,44 @@ const UsersController = {
         .catch((err)=> response(res, 404, false, err, "Get data fail"))
     },
 
-    update:(req,res,next) => {
-        const Port = process.env.PORT;
-        const Host = process.env.HOST;
-            // console.log(req.body)
-        const photo = req.file.filename;
-        console.log(photo,"filename photo")
+    // update:(req,res,next) => {
+    //     const Port = process.env.PORT;
+    //     const Host = process.env.HOST;
+    //         // console.log(req.body)
+    //     const photo = req.file.filename;
+    //     console.log(photo,"filename photo")
+    //         const id = req.payload.id;
+    //         console.log(id, "id payload")
+    //     const uri = `http://${Host}:${Port}/img/${photo}`
+    //     req.body.photo = uri
+    //         // console.log(uri, "photooo uri")
+    //         console.log(req.body)
+    //     ModelUsers.updateUser(id,req.body)
+    //     .then((result)=> response(res, 200, true, result.rows, "update data success"))
+    //     .catch((err)=> response(res, 404, false, err, "update data fail"))
+    //   },
+
+    update: async (req, res, next) => {
+        try {
             const id = req.payload.id;
-            console.log(id, "id payload")
-        const uri = `http://${Host}:${Port}/img/${photo}`
-        req.body.photo = uri
-            // console.log(uri, "photooo uri")
+            
+              if (req.file) {
+                const image = await cloudinary.uploader.upload(req.file.path, {
+                  folder: 'recipe_food',
+                });
+        
+                req.body.photo = image.url;
+              } else {
+                req.body.photo = users.photo;
+              }
+        
+            const updateDataUser = await updateUser(id, req.body)
             console.log(req.body)
-        ModelUsers.updateUser(id,req.body)
-        .then((result)=> response(res, 200, true, result.rows, "update data success"))
-        .catch((err)=> response(res, 404, false, err, "update data fail"))
-      },
+            response(res, 200, true, updateDataUser.rows, 'update users success')
+        } catch (err) {
+            response(res, 404, false, err.message, 'update users fail ')
+        }
+    },
 }
 
 

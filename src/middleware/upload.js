@@ -1,26 +1,37 @@
 const multer = require('multer');
+const path = require('path');
+const cloudinary = require('cloudinary').v2;
+const { CloudinaryStorage } = require('multer-storage-cloudinary');
 
-const storage = multer.diskStorage({
-    destination: function (req,file,cb){
-        cb(null,"./upload")
-    },
-    filename: function (req,file,cb){
-        const uniq = Date.now() + Math.round(Math.random() * 1e9)
-        cb(null,file.fieldname+'-'+uniq+'.png')
-    }
-})
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET,
+});
+
+const storage = new CloudinaryStorage({
+  cloudinary: cloudinary,
+  params: {
+    folder: 'recipe_food',
+  },
+});
 
 const upload = multer({
-    // limits: { fileSize: 10 * Math.pow(1024, 2 /* MBs*/) },
-    storage: storage,
-    // fileFilter: (req, file, cb) => {
-    //   if (file.mimetype === 'image/png' || file.mimetype === 'image/jpg' || file.mimetype === 'image/jpeg') {
-    //     cb(null, true);
-    //   } else {
-    //     cb(null, false);
-    //     return cb(new Error('Only png and jpg allowed'));
-    //   }
-    // },
-  });
+  storage: storage,
+  limits: { fileSize: 2097152 },
+  fileFilter: function (req, file, cb) {
+    const filetypes = /jpeg|jpg|png/;
+    const extname = filetypes.test(
+      path.extname(file.originalname).toLowerCase()
+    );
+    const mimetype = filetypes.test(file.mimetype);
 
-module.exports = upload
+    if (mimetype && extname) {
+      return cb(null, true);
+    } else {
+      cb(new Error('jpg & png only'));
+    }
+  },
+});
+
+module.exports = upload;
