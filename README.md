@@ -71,6 +71,7 @@ Contributions are what make the open source community such an amazing place to b
 
 - [Mama Food Recipe FrontEnd App](https://github.com/Lidiya135/FoodRecipe-FE)
 - [Mama Food Recipe BackEnd API](https://github.com/Lidiya135/FoodRecipe-BE)
+- [Deploy Mama Recipe API](https://odd-ruby-sea-lion-toga.cyclic.app)
 
 ## Contact
 
