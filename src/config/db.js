@@ -9,7 +9,7 @@ pool.connect((err) => {
   if (err) {
     console.log('<:: PostgreSQL Client Error', err);
   } else {
-    console.log(`::> PostgreSQL Client Connected lidiya01`);
+    console.log(`::> PostgreSQL Client Connected lidiya_recipe`);
   }
 });
 

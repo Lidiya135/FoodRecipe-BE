@@ -1,9 +1,9 @@
 const Pool = require("../config/db");
 
 const create = (data) => {
-    const {email,password,fullname,phone} = data
+    const {id,email,password,fullname,phone} = data
     return new Promise ((resolve,reject)=>
-        Pool.query(`INSERT INTO user_rec(email,password,fullname,phone)VALUES('${email}','${password}','${fullname}','${phone}')`,(err,result)=>{
+        Pool.query(`INSERT INTO user_rec(id,email,password,fullname,phone)VALUES('${id}','${email}','${password}','${fullname}','${phone}')`,(err,result)=>{
             if(!err){
                 resolve(result)
             } else {

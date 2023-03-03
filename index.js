@@ -20,7 +20,7 @@ app.use(helmet({
 }));
 // app.use(cors({credentials: true}))
 const corsOptions = {
-  origin: "https://food-recipe-69hmohwjl-lidiya135.vercel.app",
+  origin: ["https://food-recipe-69hmohwjl-lidiya135.vercel.app", "http://localhost:3000"],
   credentials: true, //access-control-allow-credentials:true
   optionSuccessStatus: 200,
 };

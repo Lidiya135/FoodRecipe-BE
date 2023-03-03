@@ -24,10 +24,10 @@ const UsersController = {
         }
         
         let salt = bcrypt.genSaltSync(10);
+        console.log(salt);
         let password = bcrypt.hashSync(req.body.password);
         let data = {
-            id: uuidv4(),
-            id : req.body.id,
+            id: parseInt(uuidv4()),
             email : req.body.email,
             password ,
             fullname : req.body.fullname,
