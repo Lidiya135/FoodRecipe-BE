@@ -1,21 +1,23 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
+const cookieParser = require("cookie-parser");
 const helmet = require('helmet');
+const xss = require("xss-clean");
 const morgan = require('morgan');
 require('dotenv').config();
 const mainRouter = require('./src/router/index');
 const { response } = require('./src/middleware/common');
 const app = express();
-const cookieParser = require("cookie-parser");
+
 
 app.use(express.json()); app.use(express.urlencoded({
   extended: true,
   })
  );
 app.use(bodyParser.json());
-const corsOptions ={
-  origin:['http://localhost:3000', 'https://food-recipe-fe-mu.vercel.app/', 'https://food-recipe-fe-hbl9.vercel.app/' ],
+const corsOptions = {
+  origin:"https://food-recipe-fe-mu.vercel.app/", 
   credentials:true,            //access-control-allow-credentials:true
   optionSuccessStatus:200
 };
@@ -28,6 +30,7 @@ app.use(
   })
 );
 app.use(morgan("dev"));
+app.use(xss());
 const port = process.env.PORT;
 
 app.use('/', mainRouter);
