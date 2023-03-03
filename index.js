@@ -20,7 +20,10 @@ app.use(helmet({
 }));
 // app.use(cors({credentials: true}))
 const corsOptions = {
-  origin: ["https://food-recipe-a2lx6dapk-lidiya135.vercel.app/", "https://food-recipe-fe-hbl9-6s6gfzus7-lidiya135.vercel.app/", "http://localhost:3000"],
+  origin: ["https://food-recipe-fe-hbl9.vercel.app/", 
+  "https://food-recipe-a2lx6dapk-lidiya135.vercel.app/",
+  "https://food-recipe-fe-hbl9-6s6gfzus7-lidiya135.vercel.app/",
+   "http://localhost:3000"],
   credentials: true, //access-control-allow-credentials:true
   optionSuccessStatus: 200,
 };
