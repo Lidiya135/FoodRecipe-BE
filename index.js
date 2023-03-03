@@ -6,22 +6,23 @@ const helmet = require('helmet');
 const xss = require("xss-clean");
 const morgan = require('morgan');
 require('dotenv').config();
+
 const mainRouter = require('./src/router/index');
 const { response } = require('./src/middleware/common');
 const app = express();
+const port = process.env.PORT;
 
-
+const corsOptions = {
+  origin: "https://food-recipe-fe-mu.vercel.app/", 
+  credentials: true,            //access-control-allow-credentials:true
+  optionSuccessStatus: 200,
+};
+app.use(cors(corsOptions));
 app.use(express.json()); app.use(express.urlencoded({
   extended: true,
   })
  );
 app.use(bodyParser.json());
-const corsOptions = {
-  origin:"https://food-recipe-fe-mu.vercel.app/", 
-  credentials:true,            //access-control-allow-credentials:true
-  optionSuccessStatus:200
-};
-app.use(cors(corsOptions));
 app.use(cookieParser());
 app.use(
   helmet({
@@ -31,7 +32,6 @@ app.use(
 );
 app.use(morgan("dev"));
 app.use(xss());
-const port = process.env.PORT;
 
 app.use('/', mainRouter);
 app.use('/img', express.static('./upload'));
