@@ -7,6 +7,7 @@ require('dotenv').config();
 const mainRouter = require('./src/router/index');
 const { response } = require('./src/middleware/common');
 const app = express();
+const cookieParser = require("cookie-parser");
 
 app.use(express.json()); app.use(express.urlencoded({
   extended: true,
@@ -19,7 +20,13 @@ const corsOptions ={
   optionSuccessStatus:200
 }
 app.use(cors(corsOptions))
-app.use(helmet.crossOriginResourcePolicy({policy:'cross-origin'})) 
+app.use(cookieParser());
+app.use(
+  helmet({
+    crossOriginEmbedderPolicy: false,
+    crossOriginResourcePolicy: false,
+  })
+);esourcePolicy({policy:'cross-origin'})) 
 app.use(morgan("dev"));
 const port = process.env.PORT;
 
