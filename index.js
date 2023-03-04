@@ -13,7 +13,7 @@ const app = express();
 const port = process.env.PORT;
 
 const corsOptions = {
-  origin: "https://food-recipe-fe-mu.vercel.app/", 
+  origin: "https://food-recipe-fe-mu.vercel.app", 
   credentials: true,            //access-control-allow-credentials:true
   optionSuccessStatus: 200,
 };
